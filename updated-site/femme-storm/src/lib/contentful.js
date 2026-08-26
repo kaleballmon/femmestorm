@@ -9,12 +9,11 @@ export const contentfulClient = contentful.createClient({
   space: import.meta.env.CONTENTFUL_SPACE_ID,
 });
 
-
 export async function fetchMediums() {
   const mediums = await contentfulClient.getEntries({
     content_type: "workMediums",
     include: 2,
   });
 
-  return mediums
+  return mediums;
 }

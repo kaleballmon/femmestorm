@@ -13,7 +13,7 @@ yarn install
 ```
 
 > [!NOTE]
-> `node >=22.12.0` is required. 
+> `node >=22.12.0` is required.
 
 ### Environment Variables
 
@@ -26,6 +26,7 @@ cp .env.sample .env
 3. Replace the dummy values in the `.env` variables with your real environment variables
 
 ## Development
+
 To run the development server, run:
 
 ```shell

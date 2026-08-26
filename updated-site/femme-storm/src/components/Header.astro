@@ -1,34 +1,58 @@
 ---
-import { fetchMediums } from "@lib/contentful";
+import classNames from "classnames";
 
+import { fetchMediums } from "@lib/contentful";
 
 async function getMediumHeaderUrl(mediumName) {
   const mediums = await fetchMediums();
-  const medium = mediums.items.find(medium => medium.fields.name === mediumName);
+  const medium = mediums.items.find(
+    (medium) => medium.fields.name === mediumName,
+  );
 
   if (!medium.fields.categories) {
-    return "/"
+    return "/";
   }
 
-  const sortedCategories = medium.fields.categories.sort((a, b) => a.fields.category.localeCompare(b.fields.category));
-  const firstCategory = sortedCategories[0]
+  const sortedCategories = medium.fields.categories.sort((a, b) =>
+    a.fields.category.localeCompare(b.fields.category),
+  );
+  const firstCategory = sortedCategories[0];
 
   if (firstCategory.fields.works) {
-    return `/${mediumName}/${firstCategory.fields.slug}`
+    return `/${mediumName}/${firstCategory.fields.slug}`;
   }
 
-  const sortedGroups = firstCategory.fields.groups.sort((a, b) => a.fields.name.localeCompare(b.fields.name))
-  const firstGroup = sortedGroups[0]
+  const sortedGroups = firstCategory.fields.groups.sort((a, b) =>
+    a.fields.name.localeCompare(b.fields.name),
+  );
+  const firstGroup = sortedGroups[0];
 
-  return `/${mediumName}/${firstCategory.fields.slug}/${firstGroup.fields.slug}`
+  return `/${mediumName}/${firstCategory.fields.slug}/${firstGroup.fields.slug}`;
 }
 
+const isActive = (page, currentPathName) => {
+  const pathBase = pathname.split("/")[1];
+  return pathBase === page;
+};
+
+const pathname = Astro.url.pathname;
 ---
+
 <nav>
   <ul class="flex gap-4 justify-end p-4">
-    <li><a href={await getMediumHeaderUrl("artwork")}>artwork</a></li>
-    <li><a href={await getMediumHeaderUrl("on-camera")}>on camera</a></li>
-    <li><a href={await getMediumHeaderUrl("photography")}>photography</a></li>
-    <li><a href="/about/info">about</a></li>
+    <li class={classNames({ "text-red-500": isActive("artwork", pathname) })}>
+      <a href={await getMediumHeaderUrl("artwork")}>artwork</a>
+    </li>
+    <li class={classNames({ "text-red-500": isActive("on-camera", pathname) })}>
+      <a href={await getMediumHeaderUrl("on-camera")}>on camera</a>
+    </li>
+    <li
+      class={classNames({ "text-red-500": isActive("photography", pathname) })}
+    >
+      <a href={await getMediumHeaderUrl("photography")}>photography</a>
+    </li>
+    <li class={classNames({ "text-red-500": isActive("about", pathname) })}>
+      <a href="/about/info">about</a>
+    </li>
   </ul>
 </nav>

@@ -5,15 +5,21 @@ import { fetchMediums } from "@lib/contentful";
 export async function getStaticPaths() {
   const mediums = await fetchMediums();
 
-  const mediumCategories = mediums.items.flatMap(medium => medium.fields.categories ? medium.fields.categories.map(category => ({medium, category})): [])
+  const mediumCategories = mediums.items.flatMap((medium) =>
+    medium.fields.categories
+      ? medium.fields.categories.map((category) => ({ medium, category }))
+      : [],
+  );
 
-  const noGroupMediumCategories = mediumCategories.filter(mediumCateogry => !mediumCateogry.category.fields.groups)
+  const noGroupMediumCategories = mediumCategories.filter(
+    (mediumCateogry) => !mediumCateogry.category.fields.groups,
+  );
 
-  const pages = noGroupMediumCategories.map(noGroupMediumCategory => ({
+  const pages = noGroupMediumCategories.map((noGroupMediumCategory) => ({
     params: {
       medium: noGroupMediumCategory.medium.fields.name,
       category: noGroupMediumCategory.category.fields.category,
-    }
+    },
   }));
 
   return pages;
