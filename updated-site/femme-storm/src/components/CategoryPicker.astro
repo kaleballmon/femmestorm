@@ -1,0 +1,15 @@
+---
+const { categories } = Astro.props;
+---
+
+<nav>
+  <ul>
+    {
+      categories.map((category) => (
+        <li>
+          <a href={category.href}>{category.name}</a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>

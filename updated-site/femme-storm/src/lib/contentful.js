@@ -10,10 +10,60 @@ export const contentfulClient = contentful.createClient({
 });
 
 export async function fetchMediums() {
-  const mediums = await contentfulClient.getEntries({
+  const response = await contentfulClient.getEntries({
     content_type: "workMediums",
     include: 2,
   });
 
-  return mediums;
+  return response;
+}
+
+function getGroupEntryUrl(medium, category, group) {
+    return `/${medium}/${category}/${group.fields.slug}`;
+}
+
+function getCategoryEntryUrl(medium, category) {
+  const basePath = `/${medium}/${category.fields.slug}`;
+  if (category.fields.groups) {
+    return getGroupEntryUrl(medium, category.fields.slug, category.fields.groups[0]);
+  }
+
+  return basePath;
+}
+
+export async function fetchCategories(medium) {
+  const response = await contentfulClient.getEntries({
+    content_type: "workMediums",
+    "fields.name": medium,
+    include: 2,
+    limit: 1,
+  });
+
+  if (response.items.length > 0) {
+    const entry = response.items[0];
+    return entry.fields.categories.map((category) => ({
+      name: category.fields.category,
+      href: getCategoryEntryUrl(medium, category),
+    }));
+  }
+
+  return null;
+}
+
+export async function fetchGroups(medium, category) {
+  const response = await contentfulClient.getEntries({
+    content_type: "workCategory",
+    "fields.category": category,
+    limit: 1,
+  });
+
+  if (response.items.length > 0) {
+    const entry = response.items[0];
+    return entry.fields.groups.map((group) => ({
+      name: group.fields.title,
+      href: getGroupEntryUrl(medium, category, group),
+    }));
+  }
+
+  return null;
 }

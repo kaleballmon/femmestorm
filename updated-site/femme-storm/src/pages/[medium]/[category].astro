@@ -1,6 +1,6 @@
 ---
-import FemmeStorm from "@layouts/FemmeStorm.astro";
-import { fetchMediums } from "@lib/contentful";
+import FemmeStormWork from "@layouts/FemmeStormWork.astro";
+import { fetchCategories, fetchMediums } from "@lib/contentful";
 
 export async function getStaticPaths() {
   const mediums = await fetchMediums();
@@ -25,9 +25,8 @@ export async function getStaticPaths() {
   return pages;
 }
 
-const { category } = Astro.params;
+const { category, medium } = Astro.params;
+const mediumCategories = await fetchCategories(medium);
 ---
 
-<FemmeStorm title={category}>
-  <h1>{category}</h1>
-</FemmeStorm>
+<FemmeStormWork title={category} categories={mediumCategories} />

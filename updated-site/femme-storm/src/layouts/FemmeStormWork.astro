@@ -1,0 +1,11 @@
+---
+import CategoryPicker from "@components/CategoryPicker.astro";
+import FemmeStorm from "@layouts/FemmeStorm.astro";
+
+const { title, medium, categories } = Astro.props;
+---
+
+<FemmeStorm title={title}>
+  <CategoryPicker medium={medium} categories={categories} />
+  <slot />
+</FemmeStorm>

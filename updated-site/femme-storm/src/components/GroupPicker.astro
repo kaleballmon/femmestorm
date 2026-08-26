@@ -1,0 +1,15 @@
+---
+const { groups } = Astro.props;
+---
+
+<nav>
+  <ul>
+    {
+      groups.map((group) => (
+        <li>
+          <a href={group.href}>{group.name}</a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>

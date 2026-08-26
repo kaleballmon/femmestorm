@@ -1,6 +1,7 @@
 ---
-import FemmeStorm from "@layouts/FemmeStorm.astro";
-import { fetchMediums } from "@lib/contentful";
+import GroupPicker from "@components/GroupPicker.astro";
+import FemmeStormWork from "@layouts/FemmeStormWork.astro";
+import { fetchCategories, fetchGroups, fetchMediums } from "@lib/contentful";
 
 export async function getStaticPaths() {
   const mediums = await fetchMediums();
@@ -30,9 +31,11 @@ export async function getStaticPaths() {
   return pages;
 }
 
-const { group } = Astro.params;
+const { medium, category, group } = Astro.params;
+const mediumCategories = await fetchCategories(medium);
+const categoryGroups = await fetchGroups(medium, category);
 ---
 
-<FemmeStorm title={group}>
-  <h1>{group}</h1>
-</FemmeStorm>
+<FemmeStormWork title={group} categories={mediumCategories}>
+  <GroupPicker groups={categoryGroups} />
+</FemmeStormWork>
